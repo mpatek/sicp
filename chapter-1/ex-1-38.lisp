@@ -1,0 +1,15 @@
+(define (cont-frac n d k)
+  (define (helper n d i k)
+    (if (= i k)
+      (/ (n k) (d k))
+      (/ (n i) (+ (d i) (helper n d (+ i 1) k)))))
+  (helper n d 1 k))
+
+(define (estimate-e k)
+  (+ 2 (cont-frac
+	 (lambda (i) 1.0)
+	 (lambda (i)
+	   (if (= 2 (remainder i 3))
+	     (* 2 (ceiling (/ i 3)))
+	     1))
+	 k)))
