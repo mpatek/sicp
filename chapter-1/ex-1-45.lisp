@@ -9,8 +9,6 @@
     (if (= tries 0)
       (error "i give up!")
       (let ()
-	(display "guess: ")
-	(display guess)
 	(newline)
 	(let ((next (f guess)))
 	  (if (close-enough? next guess)
