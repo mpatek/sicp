@@ -5,16 +5,12 @@
 (define (fixed-point f first-guess)
   (define (close-enough? v1 v2)
     (< (abs (- v1 v2)) tolerance))
-  (define (try guess tries)
-    (if (= tries 0)
-      (error "i give up!")
-      (let ()
-	(newline)
-	(let ((next (f guess)))
-	  (if (close-enough? next guess)
-	    next
-	    (try next (- tries 1)))))))
-  (try first-guess 10000))
+  (define (try guess)
+    (let ((next (f guess)))
+      (if (close-enough? next guess)
+	next
+	(try next))))
+  (try first-guess))
 
 (define (average-damp f)
   (lambda (x) (average x (f x))))
