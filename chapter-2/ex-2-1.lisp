@@ -1,4 +1,7 @@
 (define (make-rat n d)
-  (if (< (* n d) 0)
-    (cons (- (abs n)) (abs d))
-    (cons (abs n) (abs d))))
+  (let ((g (gcd n d)))
+    (cons
+      (/ (if (< (* n d) 0)
+	   (- (abs n))
+	   (abs n)) g)
+      (/ (abs d) g))))
