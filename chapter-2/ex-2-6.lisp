@@ -15,4 +15,5 @@
 							    f) x)))))
 			      f) x))))
 
-(define (+ f g) (f g))
+(define (+ g h)
+  (lambda (f) (lambda (x) (g (h x)))))
