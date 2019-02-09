@@ -1,0 +1,7 @@
+(define (same-parity x . items)
+  (define (same-parity-iter items)
+    (cond ((null? items) items)
+	  ((= (remainder (+ x (car items)) 2) 0)
+	   (cons (car items) (same-parity-iter (cdr items))))
+	  (else (same-parity-iter (cdr items)))))
+  (same-parity-iter (cons x items)))
