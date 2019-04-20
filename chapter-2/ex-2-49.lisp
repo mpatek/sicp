@@ -6,19 +6,19 @@
 		     (make-segment 1 0 0 0)))
 
 ; X
-(segments-painter (list
+(segments->painter (list
 		    (make-segment 0 0 1 1)
 		    (make-segment 0 1 1 0)))
 
 ; diamond
-(segments-painter (list
+(segments->painter (list
 		    (make-segment 0 0.5 0.5 1)
 		    (make-segment 0.5 1 1 0.5)
 		    (make-segment 1 0.5 0.5 0)
 		    (make-segment 0.5 0 0 0.5)))
 
 ; wave
-(segments-painter (list
+(segments->painter (list
 		    ; upper line
 		    (make-segment 0 8 2 6)
 		    (make-segment 2 6 3 7)
