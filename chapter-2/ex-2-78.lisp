@@ -1,0 +1,16 @@
+(define (attach-tag type-tag contents)
+  (cond ((and (symbol? contents) (eq? type-tag 'scheme-symbol)) contents)
+	((and (number? contents) (eq? type-tag 'scheme-number)) contents)
+	(else (cons type-tag contents))))
+
+(define (type-tag datum)
+  (cond ((symbol? datum) 'scheme-symbol)
+	((number? datum) 'scheme-number)
+	((pair? datum) (car datum))
+	(else (error "Bad tagged datum -- TYPE-TAG" datum))))
+
+(define (contents datum)
+  (cond ((symbol? datum) datum)
+	((number? datum) datum)
+	((pair? datum) (cdr datum))
+	(else (error "Bad tagged datum -- CONTENTS" datum))))
