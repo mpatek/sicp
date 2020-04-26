@@ -1,0 +1,21 @@
+; construct a polynomial of variable v, with polinomial p as the 0th order coefficient
+(define (embed-poly p v)
+  (make-poly v (adjoin-term (make-term 0 p) (the-empty-termlist))))
+
+(define (add-poly p1 p2)
+  (if (same-variable? (variable p1) (variable p2))
+    (make-poly (variable p1)
+	       (add-terms (term-list p1)
+			  (term-list p2)))
+    (if (< (variable p1) (variable p2))
+      (add-poly p1 (embed-poly p2 (variable p1)))
+      (add-poly p2 (embed-poly p1 (variable p2))))))
+
+(define (mul-poly p1 p2)
+  (if (same-variable? (variable p1) (variable p2))
+    (make-poly (variable p1)
+	       (mul-terms (term-list p1)
+			  (term-list p2)))
+    (if (< (variable p1) (variable p2))
+      (mul-poly p1 (embed-poly p2 (variable p1)))
+      (mul-poly p2 (embed-poly p1 (variable p2))))))
