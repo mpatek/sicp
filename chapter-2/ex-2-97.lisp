@@ -113,6 +113,25 @@
     (error "Polys not in same var -- GCD-POLY"
 	   (list p1 p2))))
 
+(define (constant-termlist x)
+  (list (list 0 x)))
+
+(define (reduce-terms a b)
+  (let ((gcd-ab (gcd-terms a b)))
+    (let ((factor (constant-termlist (expt (coeff (first-term gcd-ab))
+				      (+ 1 (- 
+					     (max (order (first-term a))
+						  (order (first-term b)))
+					     (order (first-term gcd-ab))))))))
+      (let (
+	    (aa (car (div-terms (mul-terms a factor) gcd-ab)))
+	    (bb (car (div-terms (mul-terms b factor) gcd-ab))))
+	(let ((gcd-coeff (constant-termlist (gcd
+					 (apply gcd (map coeff aa))
+					 (apply gcd (map coeff bb))))))
+	  (list (car (div-terms aa gcd-coeff))
+		(car (div-terms bb gcd-coeff))))))))
+
 (define p1 (make-polynomial 'x '((2 1) (1 -2) (0 1))))
 (define p2 (make-polynomial 'x '((2 11) (0 7))))
 (define p3 (make-polynomial 'x '((1 13) (0 5))))
@@ -120,4 +139,4 @@
 (define q1 (mul-poly p1 p2))
 (define q2 (mul-poly p1 p3))
 
-(gcd-poly q1 q2)
+(reduce-terms (term-list q1) (term-list q2))
