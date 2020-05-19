@@ -95,10 +95,16 @@
     (let ((new-L1 (mul-terms L1 (list (list 0 factor)))))
       (remainder-terms new-L1 L2))))
 
+
+(define (reduce-termlist L)
+  (let ((gcd-L (apply gcd (map coeff L))))
+    (mul-terms L (list (list 0 (/ 1 gcd-L))))))
+
 (define (gcd-terms a b)
-  (if (empty-termlist? b)
-    a
-    (gcd-terms b (pseudo-remainder-terms a b))))
+  (reduce-termlist
+    (if (empty-termlist? b)
+      a
+      (gcd-terms b (pseudo-remainder-terms a b)))))
 
 (define (gcd-poly p1 p2)
   (if (same-variable? (variable p1) (variable p2))
