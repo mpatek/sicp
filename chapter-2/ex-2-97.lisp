@@ -67,6 +67,18 @@
     (error "Polys not in same var -- MUL-POLY"
 	   (list p1 p2))))
 
+(define (embed-poly p v)
+  (make-polynomial v (adjoin-term (make-term 0 p) (the-empty-termlist))))
+
+(define (add-poly p1 p2)
+  (if (same-variable? (variable p1) (variable p2))
+    (make-polynomial (variable p1)
+	       (add-terms (term-list p1)
+			  (term-list p2)))
+    (if (< (variable p1) (variable p2))
+      (add-poly p1 (embed-poly p2 (variable p1)))
+      (add-poly p2 (embed-poly p1 (variable p2))))))
+
 (define (div-terms L1 L2)
   (if (empty-termlist? L1)
     (list (the-empty-termlist) (the-empty-termlist))
@@ -132,11 +144,38 @@
 	  (list (car (div-terms aa gcd-coeff))
 		(car (div-terms bb gcd-coeff))))))))
 
-(define p1 (make-polynomial 'x '((2 1) (1 -2) (0 1))))
-(define p2 (make-polynomial 'x '((2 11) (0 7))))
-(define p3 (make-polynomial 'x '((1 13) (0 5))))
+(define (reduce-poly p1 p2)
+  (if (same-variable? (variable p1) (variable p2))
+    (let ((reduced-terms (reduce-terms (term-list p1) (term-list p2))))
+      (list 
+	(make-polynomial (variable p1) (car reduced-terms))
+	(make-polynomial (variable p1) (cadr reduced-terms))))
+    (error "Polys not in same var -- REDUCE-POLY"
+	   (list p1 p2))))
 
-(define q1 (mul-poly p1 p2))
-(define q2 (mul-poly p1 p3))
+(define (reduce-integers n d)
+  (let ((g (gcd n d)))
+    (list (/ n g) (/ d g))))
 
-(reduce-terms (term-list q1) (term-list q2))
+; (define (reduce n d) (apply-generic 'reduce n d))
+(define (reduce n d) (reduce-poly n d))
+
+(define (make-rational n d) (reduce n d))
+(define (numer r) (car r))
+(define (denom r) (cadr r))
+(define (add-rational r1 r2)
+  (make-rational
+    (add-poly 
+      (mul-poly (numer r1) (denom r2))
+      (mul-poly (numer r2) (denom r1)))
+    (mul-poly (denom r1) (denom r2))))
+
+(define p1 (make-polynomial 'x '((1 1) (0 1))))
+(define p2 (make-polynomial 'x '((3 1) (0 -1))))
+(define p3 (make-polynomial 'x '((1 1))))
+(define p4 (make-polynomial 'x '((2 1) (0 -1))))
+
+(define rf1 (make-rational p1 p2))
+(define rf2 (make-rational p3 p4))
+
+(add-rational rf1 rf2)
