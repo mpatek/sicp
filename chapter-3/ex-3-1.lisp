@@ -1,2 +1,4 @@
 (define (make-accumulator x)
-  (lambda (y) (begin (set! x (+ x y)) x)))
+  (lambda (inc)
+    (set! x (+ x inc))
+    x))
