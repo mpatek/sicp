@@ -1,0 +1,13 @@
+(define (count-pairs x)
+  (if (not (pair? x))
+    0
+    (+ (count-pairs (car x))
+       (count-pairs (cdr x))
+       1)))
+
+(define x1 (list 'a 'b 'c))
+(eq? 3 (count-pairs x1))
+
+(define x2-1 (list 'c))
+(define x2-2 (list x2-1 'b))
+(eq? 4 (count-pairs x2-2))
