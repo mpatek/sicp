@@ -29,3 +29,7 @@
 (define x3-2 (cons x3-1 x3-1))
 (define x3-3 (cons x3-2 x3-2))
 (eq? 3 (count-pairs x3-3))
+
+(define z (list 'a 'b 'c))
+(set-cdr! (cdr (cdr z)) z)
+(eq? 3 (count-pairs z))
