@@ -1,0 +1,22 @@
+(define (assoc key records same-key?)
+  (cond ((null? records) false)
+	((same-key? key (caar records)) (car records))
+	(else (assoc key (cdr records) same-key?))))
+
+(define (make-table same-key?)
+  (let ((local-table (list '*table*)))
+    (define (lookup key)
+      (let ((record (assoc key (cdr local-table) same-key?)))
+	(if record
+	  (cdr record)
+	  false)))
+    (define (insert! key value)
+      (let ((record (assoc key (cdr local-table) same-key?)))
+	(if record
+	  (set-cdr! record value)
+	  (set-cdr! local-table (cons (cons key value) (cdr local-table))))))
+    (define (dispatch msg)
+      (cond ((eq? msg 'lookup) lookup)
+	    ((eq? msg 'insert!) insert!)
+	    (else (error "Unknown operation -- TABLE" msg))))
+    dispatch))
